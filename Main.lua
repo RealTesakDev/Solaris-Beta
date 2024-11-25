@@ -6,6 +6,10 @@ local LocalPlayer = Players.LocalPlayer
 local camera = workspace.CurrentCamera
 
 
+-- timer start
+local startTime = tick()
+
+
 local ESP = {
     Enabled = true,
     Exploits = {
@@ -69,11 +73,11 @@ local ESP = {
     Chests = {
         Enabled = true,
         MaxDistance = 1000,
-        ShowDistance = true,
+        ShowDistance = false,
         RefreshRate = 0.1,
         
         Text = {
-            Enabled = true,
+            Enabled = false,
             Font = 2,
             Size = 13,
             Color = Color3.new(1.000000, 0.901961, 0.000000),
@@ -93,12 +97,12 @@ local ESP = {
     Mobs = {
         Enabled = true,
         MaxDistance = 1000,
-        ShowDistance = true,
-        ShowHealth = true,
+        ShowDistance = false,
+        ShowHealth = false,
         RefreshRate = 0.1,
         
         Text = {
-            Enabled = true,
+            Enabled = false,
             Font = 2,
             Size = 13,
             Color = Color3.new(1.000000, 0.000000, 0.000000),
@@ -118,13 +122,13 @@ local ESP = {
     Players = {
         Enabled = true,
         MaxDistance = 1000,
-        ShowDistance = true,
-        ShowHealth = true,
+        ShowDistance = false,
+        ShowHealth = false,
         IgnoreTeammates = false,
         RefreshRate = 0.1,
         
         Text = {
-            Enabled = true,
+            Enabled = false,
             Font = 2,
             Size = 13,
             Color = Color3.new(0.117647, 1.000000, 0.000000),
@@ -143,7 +147,7 @@ local ESP = {
         },
         
         Tracer = {
-            Enabled = false, -- Changed to false by default
+            Enabled = false,
             Color = Color3.fromRGB(0, 255, 255),
             Thickness = 1,
             Origin = "Bottom",
@@ -166,7 +170,7 @@ local Window = Library:CreateWindow({
 
 -- Create main tabs
 local Tabs = {
-    ESP = Window:AddTab('ESP'),
+    ESP = Window:AddTab('Visuals'),
     Exploits = Window:AddTab('Exploits'),
     ['UI Settings'] = Window:AddTab('UI Settings'),
 }
@@ -175,18 +179,6 @@ local fontNames = {}
 for _, font in ipairs(ESP.Fonts) do
     table.insert(fontNames, font.Name)
 end
-
--- ESP Settings
-local ESPMainBox = Tabs.ESP:AddLeftGroupbox('Main ESP Settings')
-ESPMainBox:AddToggle('MainESPEnabled', {
-    Text = 'Enable ESP',
-    Default = ESP.Enabled,
-    Tooltip = 'Toggle all ESP features',
-    
-    Callback = function(Value)
-        ESP.Enabled = Value
-    end
-})
 
 -- Players ESP
 local PlayerESPBox = Tabs.ESP:AddRightGroupbox('Players ESP')
@@ -211,14 +203,6 @@ PlayerESPBox:AddToggle('PlayerShowHealth', {
     Default = ESP.Players.ShowHealth,
     Callback = function(Value)
         ESP.Players.ShowHealth = Value
-    end
-})
-
-PlayerESPBox:AddToggle('PlayerIgnoreTeammates', {
-    Text = 'Ignore Teammates',
-    Default = ESP.Players.IgnoreTeammates,
-    Callback = function(Value)
-        ESP.Players.IgnoreTeammates = Value
     end
 })
 
@@ -918,5 +902,11 @@ workspace.Live.ChildRemoved:Connect(onMobRemoved)
 Players.PlayerAdded:Connect(onPlayerAdded)
 Players.PlayerRemoving:Connect(onPlayerRemoving)
 
+--timer end
+local endTime = tick()
+local elapsedTime = endTime - startTime
+
+Library:Notify(string.format("hello Skids Join My Discord : https://discord.gg/wUxT4T5zZs" 20)
+Library:Notify(string.format("AntiCheat Bypassed (Kinda) in %.2f ms", elapsedTime * 1000), 10) -- Notified fast as possible since it's important
 
 return ESP
