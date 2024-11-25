@@ -64,11 +64,6 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/RealTesakDev/HolderDe
 - Multiple theme options available
 - Customizable fonts and colors
 
-## 🛡️ Notes
-- Use at your own risk
-- Keep configurations reasonable to avoid detection
-- Some features may be game-specific
-
 ## 🔄 Updates
 Stay tuned for updates by watching this repository. New features and optimizations are added regularly.
 
