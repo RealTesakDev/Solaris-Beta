@@ -159,7 +159,7 @@ local ThemeManager = loadstring(game:HttpGet(repo .. 'addons/ThemeManager.lua'))
 local SaveManager = loadstring(game:HttpGet(repo .. 'addons/SaveManager.lua'))()
 
 local Window = Library:CreateWindow({
-    Title = 'ESP & Exploits Menu',
+    Title = '.gg/wUxT4T5zZs',
     Center = true,
     AutoShow = true,
 })
@@ -676,6 +676,8 @@ local function createESP(instance, espType)
         })
     end
     
+    print("hello Skids Join My Discord : https://discord.gg/wUxT4T5zZs")
+    
     -- Create Tracer
     if settings.Tracer.Enabled then
         esp.Drawings.Tracer = createDrawing("Line", {
@@ -833,6 +835,8 @@ local function createESP(instance, espType)
     return esp
 end
 
+print("hello Skids Join My Discord : https://discord.gg/wUxT4T5zZs")
+
 -- Main ESP Management
 local espObjects = {}
 
@@ -903,6 +907,8 @@ for _, player in pairs(Players:GetPlayers()) do
         onPlayerAdded(player)
     end
 end
+
+print("hello Skids Join My Discord : https://discord.gg/wUxT4T5zZs")
 
 -- Connect events
 workspace.Thrown.ChildAdded:Connect(onChestAdded)
