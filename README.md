@@ -1,4 +1,6 @@
-![image](https://github.com/user-attachments/assets/ed94e09b-4338-483a-a13b-d44bfc202402)# Deep ESP & Exploits
+# Deep ESP & Exploits
+
+<img src="https://cdn.discordapp.com/attachments/1300184746332131358/1310515057666428958/image.png" width="100"> <img src="https://img.shields.io/badge/license-MIT-green.svg" width="90">
 
 A comprehensive ESP (Extra Sensory Perception) and Exploits script for Deepwoken, featuring a clean UI built with Linoria Library.
 
