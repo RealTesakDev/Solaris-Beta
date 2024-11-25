@@ -2,7 +2,7 @@
 
 A comprehensive ESP (Extra Sensory Perception) and Exploits script for Deepwoken, featuring a clean UI built with Linoria Library.
 
-![Version]([https://img.shields.io/badge/version-1.0.0-blue.svg](https://cdn.discordapp.com/attachments/1300184746332131358/1310515057666428958/image.png?ex=67457fc1&is=67442e41&hm=73a7a9bf65f01f23d751b651e9945ee53579a505ef5473af1049c3059d711b05&))
+![Version](https://cdn.discordapp.com/attachments/1300184746332131358/1310515057666428958/image.png?ex=67457fc1&is=67442e41&hm=73a7a9bf65f01f23d751b651e9945ee53579a505ef5473af1049c3059d711b05&)
 
 ## 📥 Installation
 
