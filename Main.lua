@@ -6,10 +6,6 @@ local LocalPlayer = Players.LocalPlayer
 local camera = workspace.CurrentCamera
 
 
--- timer start
-local startTime = tick()
-
-
 local ESP = {
     Enabled = true,
     Exploits = {
@@ -73,11 +69,11 @@ local ESP = {
     Chests = {
         Enabled = true,
         MaxDistance = 1000,
-        ShowDistance = false,
+        ShowDistance = true,
         RefreshRate = 0.1,
         
         Text = {
-            Enabled = false,
+            Enabled = true,
             Font = 2,
             Size = 13,
             Color = Color3.new(1.000000, 0.901961, 0.000000),
@@ -97,12 +93,12 @@ local ESP = {
     Mobs = {
         Enabled = true,
         MaxDistance = 1000,
-        ShowDistance = false,
-        ShowHealth = false,
+        ShowDistance = true,
+        ShowHealth = true,
         RefreshRate = 0.1,
         
         Text = {
-            Enabled = false,
+            Enabled = true,
             Font = 2,
             Size = 13,
             Color = Color3.new(1.000000, 0.000000, 0.000000),
@@ -122,13 +118,13 @@ local ESP = {
     Players = {
         Enabled = true,
         MaxDistance = 1000,
-        ShowDistance = false,
-        ShowHealth = false,
+        ShowDistance = true,
+        ShowHealth = true,
         IgnoreTeammates = false,
         RefreshRate = 0.1,
         
         Text = {
-            Enabled = false,
+            Enabled = true,
             Font = 2,
             Size = 13,
             Color = Color3.new(0.117647, 1.000000, 0.000000),
@@ -147,7 +143,7 @@ local ESP = {
         },
         
         Tracer = {
-            Enabled = false,
+            Enabled = false, -- Changed to false by default
             Color = Color3.fromRGB(0, 255, 255),
             Thickness = 1,
             Origin = "Bottom",
@@ -163,14 +159,14 @@ local ThemeManager = loadstring(game:HttpGet(repo .. 'addons/ThemeManager.lua'))
 local SaveManager = loadstring(game:HttpGet(repo .. 'addons/SaveManager.lua'))()
 
 local Window = Library:CreateWindow({
-    Title = '.gg/wUxT4T5zZs',
+    Title = 'Deepwoken Script Test',
     Center = true,
     AutoShow = true,
 })
 
 -- Create main tabs
 local Tabs = {
-    ESP = Window:AddTab('Visuals'),
+    ESP = Window:AddTab('ESP'),
     Exploits = Window:AddTab('Exploits'),
     ['UI Settings'] = Window:AddTab('UI Settings'),
 }
@@ -179,6 +175,18 @@ local fontNames = {}
 for _, font in ipairs(ESP.Fonts) do
     table.insert(fontNames, font.Name)
 end
+
+-- ESP Settings
+local ESPMainBox = Tabs.ESP:AddLeftGroupbox('Main ESP Settings')
+ESPMainBox:AddToggle('MainESPEnabled', {
+    Text = 'Enable ESP',
+    Default = ESP.Enabled,
+    Tooltip = 'Toggle all ESP features',
+    
+    Callback = function(Value)
+        ESP.Enabled = Value
+    end
+})
 
 -- Players ESP
 local PlayerESPBox = Tabs.ESP:AddRightGroupbox('Players ESP')
@@ -203,6 +211,14 @@ PlayerESPBox:AddToggle('PlayerShowHealth', {
     Default = ESP.Players.ShowHealth,
     Callback = function(Value)
         ESP.Players.ShowHealth = Value
+    end
+})
+
+PlayerESPBox:AddToggle('PlayerIgnoreTeammates', {
+    Text = 'Ignore Teammates',
+    Default = ESP.Players.IgnoreTeammates,
+    Callback = function(Value)
+        ESP.Players.IgnoreTeammates = Value
     end
 })
 
@@ -660,8 +676,6 @@ local function createESP(instance, espType)
         })
     end
     
-    print("hello Skids Join My Discord : https://discord.gg/wUxT4T5zZs")
-    
     -- Create Tracer
     if settings.Tracer.Enabled then
         esp.Drawings.Tracer = createDrawing("Line", {
@@ -819,8 +833,6 @@ local function createESP(instance, espType)
     return esp
 end
 
-print("hello Skids Join My Discord : https://discord.gg/wUxT4T5zZs")
-
 -- Main ESP Management
 local espObjects = {}
 
@@ -892,8 +904,6 @@ for _, player in pairs(Players:GetPlayers()) do
     end
 end
 
-print("hello Skids Join My Discord : https://discord.gg/wUxT4T5zZs")
-
 -- Connect events
 workspace.Thrown.ChildAdded:Connect(onChestAdded)
 workspace.Thrown.ChildRemoved:Connect(onChestRemoved)
@@ -902,11 +912,5 @@ workspace.Live.ChildRemoved:Connect(onMobRemoved)
 Players.PlayerAdded:Connect(onPlayerAdded)
 Players.PlayerRemoving:Connect(onPlayerRemoving)
 
---timer end
-local endTime = tick()
-local elapsedTime = endTime - startTime
-
-Library:Notify(string.format("hello Skids Join My Discord : https://discord.gg/wUxT4T5zZs" 20)
-Library:Notify(string.format("AntiCheat Bypassed (Kinda) in %.2f ms", elapsedTime * 1000), 10) -- Notified fast as possible since it's important
 
 return ESP
