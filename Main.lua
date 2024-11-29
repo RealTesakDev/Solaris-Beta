@@ -2,12 +2,17 @@ local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local UserInputService = game:GetService("UserInputService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Lighting = game:GetService("Lighting")
 local LocalPlayer = Players.LocalPlayer
 local camera = workspace.CurrentCamera
 
 
 local ESP = {
     Enabled = true,
+    FullBright = false,
+    NoFog = false,
+    
+
     Exploits = {
         flying = false,
         flySpeed = 180,
@@ -168,6 +173,7 @@ local Window = Library:CreateWindow({
 local Tabs = {
     ESP = Window:AddTab('ESP'),
     Exploits = Window:AddTab('Exploits'),
+    Misc = Window:AddTab('Misc'),
     ['UI Settings'] = Window:AddTab('UI Settings'),
 }
 
@@ -448,6 +454,49 @@ ExploitsBox:AddToggle('NoFallEnabled', {
         ESP.Exploits.NoFall = Value
     end
 })
+
+local AdditionalFeaturesBox = Tabs.Misc:AddLeftGroupbox('World')
+
+AdditionalFeaturesBox:AddToggle('FullBrightEnabled', {
+    Text = 'Full Bright (Placeholder)',
+    Default = false,
+    Tooltip = 'Toggle Full Bright (Not fully implemented)',
+    Callback = function(Value)
+        ESP.FullBright = Value
+        if Value then
+            Lighting.Brightness = 2
+            Lighting.GlobalShadows = false
+        else
+            Lighting.Brightness = 1
+            Lighting.GlobalShadows = true
+        end
+        print('Full Bright toggled:', Value)
+    end
+})
+
+AdditionalFeaturesBox:AddToggle('NoFog', {
+    Text = 'NoFog',
+    Default = false,
+    Tooltip = 'Toggle NoFog',
+
+    Callback = function(Value)
+        ESP.NoFog = Value
+        if Value then
+            local Lighting = game:GetService("Lighting")
+            Lighting.FogEnd = 1000000
+            Lighting.FogStart = 0
+
+            local atmosphere = Lighting:FindFirstChild('Atmosphere')
+            if atmosphere then
+                atmosphere.Density = 0
+                atmosphere.Offset = 0
+                atmosphere.Color = Color3.new(1, 1, 1)
+                atmosphere.Decay = Color3.new(1, 1, 1) -- Only needed once
+            end
+        end
+    end
+})
+
 
 -- UI Settings
 local MenuGroup = Tabs['UI Settings']:AddLeftGroupbox('Menu')
