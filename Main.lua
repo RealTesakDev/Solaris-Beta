@@ -4,7 +4,72 @@ local UserInputService = game:GetService("UserInputService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Lighting = game:GetService("Lighting")
 local LocalPlayer = Players.LocalPlayer
+local PlayerGui = LocalPlayer.PlayerGui
 local camera = workspace.CurrentCamera
+
+local function detectExecutor()
+    -- Check if identifyexecutor exists and what it returns
+    if type(identifyexecutor) == "function" then
+        local executorName = identifyexecutor()
+        
+        -- Check for known executors
+        if executorName == "Solara" then
+            return "Solara"
+        elseif executorName == "Nezur" then
+            return "Nezur"    
+        elseif executorName == "Manti" then
+            return "Manti"
+        elseif executorName == "Wave" then
+            return "Wave"
+        elseif executorName == "Celery" then
+            return "Celery"
+        elseif executorName == "Xeno" then
+            return "Xeno"
+        elseif executorName == "Zorara" then
+            return "Zorara"
+        elseif executorName == "Atlantis" then
+            return "Atlantis"
+        end
+    end
+    
+    -- If no known executor is detected
+    return "Unknown Executor"
+end
+
+
+-- Reference to stomach bar to clone
+local stomachBar = PlayerGui.StatsGui.SurvivalStats.Stomach
+
+-- Create a new sanity bar by cloning the stomach bar
+local sanityBar = stomachBar:Clone()
+sanityBar.Name = "SanityBar"
+sanityBar.Visible = false
+
+-- Reference to sanity value
+local sanityValue = workspace.Live[LocalPlayer.Name].Sanity
+
+-- Set sanity bar position to {0, 72}, {1, 0}
+sanityBar.Position = UDim2.new(0, 72, 1, 0)
+
+-- Function to update sanity bar slider size
+local function updateSanityBar()
+    -- Calculate sanity percentage
+    local currentSanity = sanityValue.Value
+    local maxSanity = sanityValue.MaxValue
+    local sanityPercentage = currentSanity / maxSanity
+
+    -- Ensure the slider exists and update its size
+    if sanityBar.Slider then
+        -- Update slider size on Y-axis (lower sanity = larger size)
+        sanityBar.Slider.Size = UDim2.new(1, 0, 1 - sanityPercentage, 0)
+
+        -- Set slider background color (RGB: 10, 26, 124)
+        sanityBar.Slider.BackgroundColor3 = Color3.fromRGB(10, 26, 124)
+    else
+        warn("Sanity Bar Slider not found!")
+    end
+end
+
 
 
 local ESP = {
@@ -22,7 +87,7 @@ local ESP = {
         MoveSpeed = 100,
         NoFall = false -- Default state
     },
-    
+
     Fonts = {
         {Name = "Legacy", Value = 0},
         {Name = "Arial", Value = 1},
@@ -127,6 +192,8 @@ local ESP = {
         ShowHealth = true,
         IgnoreTeammates = false,
         RefreshRate = 0.1,
+        ProximityNotificationsEnabled = false,
+        ProximityNotificationDistance = 500,
         
         Text = {
             Enabled = true,
@@ -164,7 +231,7 @@ local ThemeManager = loadstring(game:HttpGet(repo .. 'addons/ThemeManager.lua'))
 local SaveManager = loadstring(game:HttpGet(repo .. 'addons/SaveManager.lua'))()
 
 local Window = Library:CreateWindow({
-    Title = 'ESP & Exploits Menu',
+    Title = "DeepWoken For " .. detectExecutor(),
     Center = true,
     AutoShow = true,
 })
@@ -386,6 +453,38 @@ ChestsESPBox:AddDropdown('ChestTextFont', {
     end
 })
 
+local ProximityNotificationsBox = Tabs.ESP:AddRightGroupbox('Proximity Notifications')
+
+-- Proximity Notification Settings
+ProximityNotificationsBox:AddToggle('ProximityNotificationsEnabled', {
+    Text = 'Enable Proximity Notifications',
+    Default = ESP.Players.ProximityNotificationsEnabled,
+    Tooltip = 'Notify when players are nearby',
+    Callback = function(Value)
+        ESP.Players.ProximityNotificationsEnabled = Value
+        
+        -- Clear all existing notifications when disabled
+        if not Value then
+            for _, notification in pairs(activeProximityNotifications) do
+                notification:Destroy()
+            end
+            activeProximityNotifications = {}
+        end
+    end
+})
+
+ProximityNotificationsBox:AddSlider('ProximityNotificationDistance', {
+    Text = 'Notification Distance',
+    Default = ESP.Players.ProximityNotificationDistance,
+    Min = 50,
+    Max = 2000,
+    Rounding = 0,
+    Tooltip = 'Distance at which players trigger notifications',
+    Callback = function(Value)
+        ESP.Players.ProximityNotificationDistance = Value
+    end
+})
+
 -- Exploits Tab
 local ExploitsBox = Tabs.Exploits:AddLeftGroupbox('Movement Exploits')
 
@@ -455,47 +554,87 @@ ExploitsBox:AddToggle('NoFallEnabled', {
     end
 })
 
-local AdditionalFeaturesBox = Tabs.Misc:AddLeftGroupbox('World')
 
+local AdditionalFeaturesBox = Tabs.Misc:AddRightGroupbox('World')
+
+-- FullBright Toggle
 AdditionalFeaturesBox:AddToggle('FullBrightEnabled', {
-    Text = 'Full Bright (Placeholder)',
+    Text = 'Full Bright',
     Default = false,
-    Tooltip = 'Toggle Full Bright (Not fully implemented)',
+    Tooltip = 'Toggle Full Bright',
     Callback = function(Value)
-        ESP.FullBright = Value
         if Value then
-            Lighting.Brightness = 2
+            Lighting.Brightness = 10
             Lighting.GlobalShadows = false
+            Lighting.Ambient = Color3.new(1, 1, 1)
+            Lighting.OutdoorAmbient = Color3.new(1, 1, 1)
+            Lighting.ExposureCompensation = 2
         else
             Lighting.Brightness = 1
             Lighting.GlobalShadows = true
+            Lighting.Ambient = Color3.new(0, 0, 0)
+            Lighting.OutdoorAmbient = Color3.new(0, 0, 0)
+            Lighting.ExposureCompensation = 0
         end
-        print('Full Bright toggled:', Value)
     end
 })
 
+-- NoFog Toggle
+local noFogConnection
+
 AdditionalFeaturesBox:AddToggle('NoFog', {
-    Text = 'NoFog',
+    Text = 'No Fog',
     Default = false,
-    Tooltip = 'Toggle NoFog',
-
+    Tooltip = 'Toggle No Fog',
     Callback = function(Value)
-        ESP.NoFog = Value
         if Value then
-            local Lighting = game:GetService("Lighting")
-            Lighting.FogEnd = 1000000
-            Lighting.FogStart = 0
+            -- Create loop to ensure fog settings are continuously applied
+            if noFogConnection then noFogConnection:Disconnect() end
+            noFogConnection = RunService.RenderStepped:Connect(function()
+                Lighting.FogEnd = 1e6
+                Lighting.FogStart = 0
+                local atmosphere = Lighting:FindFirstChild('Atmosphere')
+                if atmosphere then
+                    atmosphere.Density = 0
+                    atmosphere.Offset = 0
+                    atmosphere.Color = Color3.new(1, 1, 1)
+                    atmosphere.Decay = Color3.new(1, 1, 1)
+                end
+            end)
+        else
+            -- Disconnect the loop when NoFog is disabled
+            if noFogConnection then
+                noFogConnection:Disconnect()
+                noFogConnection = nil
+            end
 
+            -- Restore original fog settings
+            Lighting.FogEnd = 1000
+            Lighting.FogStart = 0
             local atmosphere = Lighting:FindFirstChild('Atmosphere')
             if atmosphere then
-                atmosphere.Density = 0
+                atmosphere.Density = 0.3
                 atmosphere.Offset = 0
-                atmosphere.Color = Color3.new(1, 1, 1)
-                atmosphere.Decay = Color3.new(1, 1, 1) -- Only needed once
+                atmosphere.Color = Color3.fromRGB(199, 199, 255)
+                atmosphere.Decay = Color3.fromRGB(128, 128, 255)
             end
         end
     end
 })
+
+
+local SanityBarBox = Tabs.Misc:AddLeftGroupbox('Sanity Bar Settings')
+
+-- Toggle to enable/disable sanity bar
+SanityBarBox:AddToggle('SanityBarEnabled', {
+    Text = 'Enable Sanity Bar',
+    Default = sanityBar.Visible,  -- Set to true if sanityBar exists, false otherwise
+    Tooltip = 'Toggle the visibility of the sanity bar',
+    Callback = function(Value)
+        sanityBar.Visible = Value
+    end
+})
+
 
 
 -- UI Settings
@@ -537,6 +676,64 @@ hook = hookmetamethod(game, "__namecall", function(Self, ...)
     -- Call the original method if conditions aren't met
     return hook(Self, ...)
 end)
+
+-- Table to track current notifications
+local activeProximityNotifications = {}
+
+-- Function to handle proximity notifications
+local function handleProximityNotifications()
+    if not ESP.Players.ProximityNotificationsEnabled then return end
+    
+    local localPlayer = Players.LocalPlayer
+    if not localPlayer or not localPlayer.Character then return end
+    
+    local proximityDistance = ESP.Players.ProximityNotificationDistance or 500
+    local localRootPart = localPlayer.Character:FindFirstChild("HumanoidRootPart")
+    if not localRootPart then return end
+    
+    -- Track which players we've already notified
+    local currentNearbyPlayers = {}
+    
+    -- Check all players
+    for _, player in ipairs(Players:GetPlayers()) do
+        if player ~= localPlayer and (not ESP.Players.IgnoreTeammates or player.Team ~= localPlayer.Team) then
+            local character = player.Character
+            local humanoidRootPart = character and character:FindFirstChild("HumanoidRootPart")
+            
+            if humanoidRootPart then
+                local distance = (humanoidRootPart.Position - localRootPart.Position).Magnitude
+                
+                if distance <= proximityDistance then
+                    currentNearbyPlayers[player.Name] = true
+                    
+                    -- If no notification exists for this player, create one
+                    if not activeProximityNotifications[player.Name] then
+                        activeProximityNotifications[player.Name] = {
+                            FirstNotified = tick(),
+                            Notification = Library:Notify(string.format("%s is Nearby!", player.Name), nil, {
+                                TextColor3 = Color3.new(1, 1, 1),
+                                BackgroundColor3 = Color3.fromRGB(255, 100, 100)
+                            })
+                        }
+                    end
+                end
+            end
+        end
+    end
+    
+    -- Remove notifications for players no longer nearby
+    for playerName, notificationData in pairs(activeProximityNotifications) do
+        if not currentNearbyPlayers[playerName] then
+            if notificationData.Notification then
+                notificationData.Notification:Destroy()
+            end
+            activeProximityNotifications[playerName] = nil
+        end
+    end
+end
+
+-- Connect the proximity check to RunService
+RunService.Heartbeat:Connect(handleProximityNotifications)
 
 local function updateMovementDirection()
     movementDirection = Vector3.new(0, 0, 0) -- Reset direction every frame
@@ -960,6 +1157,11 @@ workspace.Live.ChildAdded:Connect(onMobAdded)
 workspace.Live.ChildRemoved:Connect(onMobRemoved)
 Players.PlayerAdded:Connect(onPlayerAdded)
 Players.PlayerRemoving:Connect(onPlayerRemoving)
+
+sanityBar.Parent = PlayerGui.StatsGui.SurvivalStats
+
+-- Connect the update function to sanity value changes
+sanityValue.Changed:Connect(updateSanityBar)
 
 
 return ESP
