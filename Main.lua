@@ -33,7 +33,7 @@ local function detectExecutor()
     end
     
     -- If no known executor is detected
-    return "Unknown Executor"
+    return "Unknown Executor!"
 end
 
 
