@@ -239,8 +239,9 @@ local Window = Library:CreateWindow({
 -- Create main tabs
 local Tabs = {
     ESP = Window:AddTab('ESP'),
-    Exploits = Window:AddTab('Exploits'),
+    Combat = Window:AddTab('Combat'),
     Misc = Window:AddTab('Misc'),
+    
     ['UI Settings'] = Window:AddTab('UI Settings'),
 }
 
@@ -486,7 +487,7 @@ ProximityNotificationsBox:AddSlider('ProximityNotificationDistance', {
 })
 
 -- Exploits Tab
-local ExploitsBox = Tabs.Exploits:AddLeftGroupbox('Movement Exploits')
+local ExploitsBox = Tabs.Combat:AddLeftGroupbox('Movement Exploits')
 
 ExploitsBox:AddToggle('FlyingEnabled', {
     Text = 'Flying',
@@ -546,6 +547,9 @@ ExploitsBox:AddSlider('VerticalSpeed', {
     end
 })
 
+
+if detectExecutor() == "Wave" or detectExecutor() == "Atlantis" then
+
 ExploitsBox:AddToggle('NoFallEnabled', {
     Text = 'No Fall Damage',
     Default = ESP.Exploits.NoFall,
@@ -553,6 +557,8 @@ ExploitsBox:AddToggle('NoFallEnabled', {
         ESP.Exploits.NoFall = Value
     end
 })
+
+end
 
 
 local AdditionalFeaturesBox = Tabs.Misc:AddRightGroupbox('World')
