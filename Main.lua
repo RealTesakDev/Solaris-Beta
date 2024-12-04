@@ -241,9 +241,8 @@ local Window = Library:CreateWindow({
 -- Create main tabs
 local Tabs = {
     ESP = Window:AddTab('ESP'),
-    Combat = Window:AddTab('Combat'),
+    Exploits = Window:AddTab('Exploits'),
     Misc = Window:AddTab('Misc'),
-    
     ['UI Settings'] = Window:AddTab('UI Settings'),
 }
 
@@ -489,7 +488,7 @@ ProximityNotificationsBox:AddSlider('ProximityNotificationDistance', {
 })
 
 -- Exploits Tab
-local ExploitsBox = Tabs.Combat:AddLeftGroupbox('Movement Exploits')
+local ExploitsBox = Tabs.Exploits:AddLeftGroupbox('Movement Exploits')
 
 ExploitsBox:AddToggle('FlyingEnabled', {
     Text = 'Flying',
