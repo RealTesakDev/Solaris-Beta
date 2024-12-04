@@ -29,6 +29,8 @@ local function detectExecutor()
             return "Zorara"
         elseif executorName == "Atlantis" then
             return "Atlantis"
+        elseif executorName == "AWP" then
+            return "AWP"
         end
     end
     
@@ -547,9 +549,6 @@ ExploitsBox:AddSlider('VerticalSpeed', {
     end
 })
 
-
-if detectExecutor() == "Wave" or detectExecutor() == "Atlantis" then
-
 ExploitsBox:AddToggle('NoFallEnabled', {
     Text = 'No Fall Damage',
     Default = ESP.Exploits.NoFall,
@@ -557,8 +556,6 @@ ExploitsBox:AddToggle('NoFallEnabled', {
         ESP.Exploits.NoFall = Value
     end
 })
-
-end
 
 
 local AdditionalFeaturesBox = Tabs.Misc:AddRightGroupbox('World')
