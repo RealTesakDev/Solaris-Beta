@@ -1,3 +1,18 @@
+local function safeLoadModule(url)
+    local success, module = pcall(function()
+        return loadstring(game:HttpGet(url))()
+    end)
+    
+    if not success then
+        warn("Failed to load module from: " .. url)
+        return nil
+    end
+    
+    return module
+end
+
+local Options = safeLoadModule("https://raw.githubusercontent.com/RealTesakDev/HolderDeep/refs/heads/main/options.lua")
+if not Options then return end
 
 local function getInstancePosition(instance)
     if instance:IsA("BasePart") then
