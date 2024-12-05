@@ -20,7 +20,7 @@ local function safeLoadModule(url)
     return module
 end
 
-local Options = safeLoadModule("https://raw.githubusercontent.com/RealTesakDev/HolderDeep/refs/heads/main/options.lua")
+local ESP = safeLoadModule("https://raw.githubusercontent.com/RealTesakDev/HolderDeep/refs/heads/main/options.lua")
 if not Options then return end
 
 local function getInstancePosition(instance)
@@ -66,11 +66,11 @@ local function createESP(instance, espType)
     
     local settings
     if espType == "Player" then
-        settings = Options.Players
+        settings = ESP.Players
     elseif espType == "Mob" then
-        settings = Options.Mobs
+        settings = ESP.Mobs
     else
-        settings = Options.Chests
+        settings = ESP.Chests
     end
     
     local esp = {
