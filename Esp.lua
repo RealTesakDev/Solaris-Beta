@@ -1,3 +1,12 @@
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local UserInputService = game:GetService("UserInputService")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Lighting = game:GetService("Lighting")
+local LocalPlayer = Players.LocalPlayer
+local PlayerGui = LocalPlayer.PlayerGui
+local camera = workspace.CurrentCamera
+
 local function safeLoadModule(url)
     local success, module = pcall(function()
         return loadstring(game:HttpGet(url))()
