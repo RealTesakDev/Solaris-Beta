@@ -9,11 +9,17 @@ local camera = workspace.CurrentCamera
 
 local function safeLoadModule(url)
     local success, module = pcall(function()
-        return loadstring(game:HttpGet(url))()
+        local response = game:HttpGet(url)
+        if not response then
+            warn("No response from URL: " .. url)
+            return nil
+        end
+        return loadstring(response)()
     end)
     
     if not success then
         warn("Failed to load module from: " .. url)
+        warn("Error details: " .. tostring(module))
         return nil
     end
     
