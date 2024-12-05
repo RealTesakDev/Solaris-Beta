@@ -41,15 +41,15 @@ local function createESP(instance, espType)
     if not instance:IsA("Model") and espType ~= "Chest" then return end
     
     local settings
-    if espType == "Player" then
-        settings = ESP.Players
-    elseif espType == "Mob" then
-        settings = ESP.Mobs
-    else
-        settings = ESP.Chests
-    end
+if espType == "Player" then
+    settings = Options.Players
+elseif espType == "Mob" then
+    settings = Options.Mobs
+else
+    settings = Options.Chests
+end
     
-    local esp = {
+    local Options = {
         Drawings = {
             Info = nil,
             HealthBarOutline = nil,
@@ -61,14 +61,14 @@ local function createESP(instance, espType)
     }
 
     local function updateFont()
-        if esp.Drawings.Info then
-            esp.Drawings.Info.Font = settings.Text.Font
+        if Options.Drawings.Info then
+            Options.Drawings.Info.Font = settings.Text.Font
         end
     end
     
     -- Create Text ESP
     if settings.Text.Enabled then
-        esp.Drawings.Info = createDrawing("Text", {
+        Options.Drawings.Info = createDrawing("Text", {
             Text = "",
             Size = settings.Text.Size,
             Center = true,
@@ -80,24 +80,24 @@ local function createESP(instance, espType)
         })
     end
 
-    esp.UpdateFont = updateFont
+    Options.UpdateFont = updateFont
     
     -- Create Health Bar (Players only)
     if espType == "Player" and settings.HealthBar.Enabled then
-        esp.Drawings.HealthBarOutline = createDrawing("Square", {
+        Options.Drawings.HealthBarOutline = createDrawing("Square", {
             Thickness = 1,
             Color = settings.HealthBar.OutlineColor,
             Filled = false,
             Visible = false
         })
         
-        esp.Drawings.HealthBarBackground = createDrawing("Square", {
+        Options.Drawings.HealthBarBackground = createDrawing("Square", {
             Color = settings.HealthBar.BackgroundColor,
             Filled = true,
             Visible = false
         })
         
-        esp.Drawings.HealthBarFill = createDrawing("Square", {
+        Options.Drawings.HealthBarFill = createDrawing("Square", {
             Color = settings.HealthBar.Color,
             Filled = true,
             Visible = false
@@ -106,7 +106,7 @@ local function createESP(instance, espType)
     
     -- Create Tracer
     if settings.Tracer.Enabled then
-        esp.Drawings.Tracer = createDrawing("Line", {
+        Options.Drawings.Tracer = createDrawing("Line", {
             Thickness = settings.Tracer.Thickness,
             Color = settings.Tracer.Color,
             Transparency = settings.Tracer.Transparency,
@@ -117,9 +117,9 @@ local function createESP(instance, espType)
     -- Modified Update Function with Toggle Checks
     local function updateESP()
         -- First check if main ESP and type-specific ESP are enabled
-        if not ESP.Enabled or not settings.Enabled then
+        if not Options.Enabled or not settings.Enabled then
             -- Hide all drawings if ESP is disabled
-            for _, drawing in pairs(esp.Drawings) do
+            for _, drawing in pairs(Options.Drawings) do
                 if drawing then
                     drawing.Visible = false
                 end
@@ -164,8 +164,8 @@ local function createESP(instance, espType)
             local textOffset = Vector2.new(0, -45 * scaleFactor)
             
             -- Update Text ESP
-            if esp.Drawings.Info and settings.Text.Enabled then
-                esp.Drawings.Info.Position = basePosition + textOffset
+            if Options.Drawings.Info and settings.Text.Enabled then
+                Options.Drawings.Info.Position = basePosition + textOffset
                 
                 local infoText = ""
                 if espType == "Chest" then
@@ -187,38 +187,38 @@ local function createESP(instance, espType)
                     end
                 end
                 
-                esp.Drawings.Info.Text = infoText
-                esp.Drawings.Info.Visible = true
+                Options.Drawings.Info.Text = infoText
+                Options.Drawings.Info.Visible = true
             end
             
             -- Update Health Bar
             if espType == "Player" and settings.HealthBar.Enabled then
                 local humanoid = instance:FindFirstChild("Humanoid")
-                if humanoid and esp.Drawings.HealthBarOutline then
+                if humanoid and Options.Drawings.HealthBarOutline then
                     local healthBarWidth = settings.HealthBar.Width
                     local healthBarHeight = settings.HealthBar.Height * scaleFactor
                     local healthBarPosition = basePosition + Vector2.new(-30 * scaleFactor, -healthBarHeight/2)
                     
-                    esp.Drawings.HealthBarOutline.Size = Vector2.new(healthBarWidth + 2, healthBarHeight + 2)
-                    esp.Drawings.HealthBarOutline.Position = healthBarPosition - Vector2.new(1, 1)
-                    esp.Drawings.HealthBarOutline.Visible = true
+                    Options.Drawings.HealthBarOutline.Size = Vector2.new(healthBarWidth + 2, healthBarHeight + 2)
+                    Options.Drawings.HealthBarOutline.Position = healthBarPosition - Vector2.new(1, 1)
+                    Options.Drawings.HealthBarOutline.Visible = true
                     
-                    esp.Drawings.HealthBarBackground.Size = Vector2.new(healthBarWidth, healthBarHeight)
-                    esp.Drawings.HealthBarBackground.Position = healthBarPosition
-                    esp.Drawings.HealthBarBackground.Visible = true
+                    Options.Drawings.HealthBarBackground.Size = Vector2.new(healthBarWidth, healthBarHeight)
+                    Options.Drawings.HealthBarBackground.Position = healthBarPosition
+                    Options.Drawings.HealthBarBackground.Visible = true
                     
                     local healthRatio = humanoid.Health / humanoid.MaxHealth
-                    esp.Drawings.HealthBarFill.Size = Vector2.new(healthBarWidth, healthBarHeight * healthRatio)
-                    esp.Drawings.HealthBarFill.Position = Vector2.new(
+                    Options.Drawings.HealthBarFill.Size = Vector2.new(healthBarWidth, healthBarHeight * healthRatio)
+                    Options.Drawings.HealthBarFill.Position = Vector2.new(
                         healthBarPosition.X,
                         healthBarPosition.Y + (healthBarHeight * (1 - healthRatio))
                     )
-                    esp.Drawings.HealthBarFill.Visible = true
+                    Options.Drawings.HealthBarFill.Visible = true
                 end
             end
             
             -- Update Tracer
-            if esp.Drawings.Tracer and settings.Tracer.Enabled then
+            if Options.Drawings.Tracer and settings.Tracer.Enabled then
                 local origin
                 if settings.Tracer.Origin == "Mouse" then
                     origin = Vector2.new(LocalPlayer:GetMouse().X, LocalPlayer:GetMouse().Y)
@@ -228,13 +228,13 @@ local function createESP(instance, espType)
                     origin = Vector2.new(workspace.CurrentCamera.ViewportSize.X/2, workspace.CurrentCamera.ViewportSize.Y)
                 end
                 
-                esp.Drawings.Tracer.From = origin
-                esp.Drawings.Tracer.To = basePosition
-                esp.Drawings.Tracer.Visible = true
+                Options.Drawings.Tracer.From = origin
+                Options.Drawings.Tracer.To = basePosition
+                Options.Drawings.Tracer.Visible = true
             end
         else
             -- Hide all drawings if not visible
-            for _, drawing in pairs(esp.Drawings) do
+            for _, drawing in pairs(Options.Drawings) do
                 if drawing then
                     drawing.Visible = false
                 end
@@ -255,7 +255,7 @@ local function createESP(instance, espType)
     end
     
     -- Connect update function
-    esp.Connection = RunService.RenderStepped:Connect(updateESP)
+    Options.Connection = RunService.RenderStepped:Connect(updateESP)
     updateESP() -- Initial update
     
     return esp
