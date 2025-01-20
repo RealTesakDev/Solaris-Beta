@@ -233,7 +233,7 @@ local ThemeManager = loadstring(game:HttpGet(repo .. 'addons/ThemeManager.lua'))
 local SaveManager = loadstring(game:HttpGet(repo .. 'addons/SaveManager.lua'))()
 
 local Window = Library:CreateWindow({
-    Title = "DeepWoken For " .. detectExecutor(),
+    Title = "Solaris [Beta] 12/03/24",
     Center = true,
     AutoShow = true,
 })
