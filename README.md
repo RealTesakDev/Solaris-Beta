@@ -1,62 +1,74 @@
-DeepWoken Script (Open Source)
+# Solaris | Free Deepwoken Script
 
-<img src="https://cdn.discordapp.com/attachments/1300184746332131358/1310515057666428958/image.png" width="500"> <img src="https://img.shields.io/badge/license-MIT-green.svg" width="90">
+<img src="https://cdn.discordapp.com/attachments/1300184746332131358/1310515057666428958/image.png?ex=67457fc1&is=67442e41&hm=73a7a9bf65f01f23d751b651e9945ee53579a505ef5473af1049c3059d711b05&" width="500"> <img src="https://img.shields.io/badge/license-MIT-green.svg" width="90">
 
-A powerful ESP and exploit script for Deepwoken with a sleek UI built using the Linoria Library.
+A comprehensive ESP (Extra Sensory Perception) and Exploits script for Deepwoken, featuring a clean UI built with Linoria Library.
 
-📥 Installation
+## 📥 Installation
 
-Run this loadstring in your executor:
+Add this loadstring to your executor:
 
+```lua
 loadstring(game:HttpGet("https://raw.githubusercontent.com/RealTesakDev/HolderDeep/refs/heads/main/Main.lua"))()
+```
 
-✨ Features
+## ✨ Features
 
-ESP
+### ESP Capabilities
+- **Player ESP**
+  - Distance display
+  - Health indicators
+  - Customizable fonts
+  - Team filtering
+  - Adjustable max distance
+  - Health bars
+  - Tracers (toggleable)
 
-Player ESP: Distance, health, team filtering, health bars, tracers, and more.
+- **Mob ESP**
+  - Distance tracking
+  - Health display
+  - Customizable appearance
+  - Max distance control
 
-Mob ESP: Distance, health, customizable visuals.
+- **Chest ESP**
+  - Distance indicators
+  - Visual customization
+  - Range configuration
 
-Chest ESP: Distance, range, and appearance controls.
+### Exploit Features
+- **Flying System**
+  - Adjustable fly speed
+  - Vertical speed control
+  - Toggle keybind (Default: Z)
+  - Smooth movement
 
+- **Damage Prevention**
+  - No fall damage toggle
 
-Exploits
+### UI Features
+- Clean, modern interface
+- Customizable themes
+- Save/load configurations
+- Keybind customization
+- Easy-to-use toggles and sliders
 
-Fly: Speed, vertical control, smooth movement (Default key: Z).
+## 🎮 Controls
+- **Menu Toggle:** End key (customizable)
+- **Flying:** Z key (customizable)
+- **Movement:** WASD
+- **Vertical Movement:** Space (Up) / Left Shift (Down)
 
-No Fall Damage: Toggleable.
+## ⚙️ Configuration
+- All settings can be adjusted through the UI
+- Settings are saved automatically
+- Multiple theme options available
+- Customizable fonts and colors
 
+## 🔄 Updates
+Stay tuned for updates by watching this repository. New features and optimizations are added regularly.
 
-UI
+## 📜 License
+This project is licensed under the MIT License - see the LICENSE file for details.
 
-Clean, modern design.
-
-Save/load settings.
-
-Custom themes, fonts, colors, and keybinds.
-
-
-🎮 Controls
-
-Menu: End (customizable)
-
-Fly: Z (customizable)
-
-Vertical Fly: Space (Up) / Shift (Down)
-
-Movement: WASD
-
-
-🔄 Updates
-
-Regularly updated with new features and improvements. Follow the repo to stay up-to-date.
-
-📜 License
-
-Licensed under MIT.
-
-⚠️ Disclaimer
-
-For educational use only. Use responsibly.
-
+## ⚠️ Disclaimer
+This script is for educational purposes only. Use at your own risk.
