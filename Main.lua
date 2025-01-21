@@ -6,6 +6,7 @@ local Lighting = game:GetService("Lighting")
 local LocalPlayer = Players.LocalPlayer
 local PlayerGui = LocalPlayer.PlayerGui
 local camera = workspace.CurrentCamera
+print("sigma")
 
 local function detectExecutor()
     -- Check if identifyexecutor exists and what it returns
